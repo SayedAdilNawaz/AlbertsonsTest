@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="sutro">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Albertsons - Cart with Recommendations</title>
+
+  <!-- Pantry Design System Styles -->
+  <link rel="stylesheet" href="_ds/pantry-design-system-new-pds-5779efe9-4163-4539-a313-fc0705f5bc71/styles.css">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: var(--pds-global-font-family-nunito-sans);
+      background-color: var(--pds-theme-color-background-baseline);
+      padding: var(--pds-global-space-400);
+    }
+
+    .container {
+      max-width: 1024px;
+      margin: 0 auto;
+    }
+
+    /* Header */
+    .cart-header {
+      background-color: var(--pds-theme-color-foreground-brand-primary);
+      color: white;
+      padding: var(--pds-global-space-600);
+      border-radius: var(--pds-global-border-radius-200);
+      margin-bottom: var(--pds-global-space-600);
+    }
+
+    .cart-header h1 {
+      font-size: var(--pds-global-font-size-700);
+      font-weight: var(--pds-global-font-weight-700);
+      font-family: var(--pds-global-font-family-poppins);
+    }
+
+    /* Main Layout */
+    .cart-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--pds-global-space-600);
+      margin-bottom: var(--pds-global-space-800);
+    }
+
+    @media (max-width: 768px) {
+      .cart-container {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Cart Items Section */
+    .cart-items {
+      background: white;
+      padding: var(--pds-global-space-600);
+      border-radius: var(--pds-global-border-radius-200);
+      box-shadow: var(--pds-global-shadow-lowest-bottom);
+    }
+
+    .section-title {
+      font-size: var(--pds-global-font-size-500);
+      font-weight: var(--pds-global-font-weight-600);
+      font-family: var(--pds-global-font-family-poppins);
+      margin-bottom: var(--pds-global-space-400);
+      color: var(--pds-theme-color-foreground-primary);
+    }
+
+    /* Product Items */
+    .product-item {
+      display: flex;
+      gap: var(--pds-global-space-400);
+      padding: var(--pds-global-space-400);
+      border-bottom: 1px solid var(--pds-global-color-general-grey-20);
+      align-items: center;
+    }
+
+    .product-item:last-child {
+      border-bottom: none;
+    }
+
+    .product-image {
+      width: 80px;
+      height: 80px;
+      background-color: var(--pds-global-color-general-grey-20);
+      border-radius: var(--pds-global-border-radius-100);
+      flex-shrink: 0;
+    }
+
+    .product-details {
+      flex: 1;
+    }
+
+    .product-name {
+      font-size: var(--pds-global-font-size-200);
+      font-weight: var(--pds-global-font-weight-600);
+      color: var(--pds-theme-color-foreground-primary);
+      margin-bottom: var(--pds-global-space-100);
+    }
+
+    .product-price {
+      font-size: var(--pds-global-font-size-100);
+      color: var(--pds-theme-color-foreground-secondary);
+    }
+
+    .product-qty {
+      font-size: var(--pds-global-font-size-200);
+      font-weight: var(--pds-global-font-weight-600);
+      color: var(--pds-theme-color-foreground-primary);
+    }
+
+    /* Recommendations Section */
+    .recommendations {
+      background: white;
+      padding: var(--pds-global-space-600);
+      border-radius: var(--pds-global-border-radius-200);
+      box-shadow: var(--pds-global-shadow-lowest-bottom);
+    }
+
+    .recommendations-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: var(--pds-global-space-400);
+    }
+
+    @media (max-width: 640px) {
+      .recommendations-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Product Card */
+    .rec-card {
+      border: 1px solid var(--pds-global-color-general-grey-20);
+      border-radius: var(--pds-global-border-radius-200);
+      padding: var(--pds-global-space-400);
+      text-align: center;
+      transition: box-shadow 0.2s ease;
+    }
+
+    .rec-card:hover {
+      box-shadow: var(--pds-global-shadow-low-bottom);
+    }
+
+    .rec-product-image {
+      width: 100%;
+      height: 160px;
+      background-color: var(--pds-global-color-general-grey-20);
+      border-radius: var(--pds-global-border-radius-100);
+      margin-bottom: var(--pds-global-space-300);
+    }
+
+    .rec-product-name {
+      font-size: var(--pds-global-font-size-200);
+      font-weight: var(--pds-global-font-weight-600);
+      color: var(--pds-theme-color-foreground-primary);
+      margin-bottom: var(--pds-global-space-100);
+    }
+
+    .rec-product-price {
+      font-size: var(--pds-global-font-size-200);
+      color: var(--pds-theme-color-foreground-brand-primary);
+      font-weight: var(--pds-global-font-weight-600);
+      margin-bottom: var(--pds-global-space-300);
+    }
+
+    .add-to-cart-btn {
+      width: 100%;
+    }
+
+    /* Summary Section */
+    .cart-summary {
+      background: white;
+      padding: var(--pds-global-space-600);
+      border-radius: var(--pds-global-border-radius-200);
+      box-shadow: var(--pds-global-shadow-lowest-bottom);
+    }
+
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      padding: var(--pds-global-space-300) 0;
+      font-size: var(--pds-global-font-size-200);
+      border-bottom: 1px solid var(--pds-global-color-general-grey-20);
+    }
+
+    .summary-row:last-child {
+      border-bottom: none;
+    }
+
+    .summary-total {
+      font-weight: var(--pds-global-font-weight-700);
+      font-size: var(--pds-global-font-size-300);
+      color: var(--pds-theme-color-foreground-primary);
+      padding: var(--pds-global-space-400) 0;
+    }
+
+    .checkout-btn {
+      width: 100%;
+      margin-top: var(--pds-global-space-400);
+    }
+  </style>
+</head>
+<body data-theme="sutro">
+  <div class="container">
+    <!-- Header -->
+    <div class="cart-header">
+      <h1>Shopping Cart</h1>
+    </div>
+
+    <!-- Main Layout -->
+    <div class="cart-container">
+      <!-- Left Column: Cart Items -->
+      <div>
+        <div class="cart-items">
+          <h2 class="section-title">Items in Your Cart</h2>
+
+          <!-- Product Item 1 -->
+          <div class="product-item">
+            <div class="product-image"></div>
+            <div class="product-details">
+              <div class="product-name">Fresh Apples (per lb)</div>
+              <div class="product-price">$3.49 each</div>
+              <div class="product-qty">Quantity: 2</div>
+            </div>
+          </div>
+
+          <!-- Product Item 2 -->
+          <div class="product-item">
+            <div class="product-image"></div>
+            <div class="product-details">
+              <div class="product-name">Organic Spinach</div>
+              <div class="product-price">$2.99 each</div>
+              <div class="product-qty">Quantity: 1</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Cart Summary -->
+        <div class="cart-summary" style="margin-top: var(--pds-global-space-600);">
+          <h2 class="section-title">Order Summary</h2>
+          <div class="summary-row">
+            <span>Subtotal</span>
+            <span>$9.97</span>
+          </div>
+          <div class="summary-row">
+            <span>Tax</span>
+            <span>$0.80</span>
+          </div>
+          <div class="summary-row">
+            <span>Shipping</span>
+            <span>Free</span>
+          </div>
+          <div class="summary-total summary-row">
+            <span>Total</span>
+            <span>$10.77</span>
+          </div>
+          <button class="pds-btn pds-btn--primary pds-btn--size-lg checkout-btn">
+            Proceed to Checkout
+          </button>
+        </div>
+      </div>
+
+      <!-- Right Column: Recommendations -->
+      <div class="recommendations">
+        <h2 class="section-title">Similar Items You Might Like</h2>
+        <div class="recommendations-grid">
+          <!-- Rec Card 1 -->
+          <div class="rec-card">
+            <div class="rec-product-image"></div>
+            <div class="rec-product-name">Bananas</div>
+            <div class="rec-product-price">$0.59/lb</div>
+            <button class="pds-btn pds-btn--primary pds-btn--size-md add-to-cart-btn">
+              + Add to Cart
+            </button>
+          </div>
+
+          <!-- Rec Card 2 -->
+          <div class="rec-card">
+            <div class="rec-product-image"></div>
+            <div class="rec-product-name">Lettuce</div>
+            <div class="rec-product-price">$1.99 each</div>
+            <button class="pds-btn pds-btn--primary pds-btn--size-md add-to-cart-btn">
+              + Add to Cart
+            </button>
+          </div>
+
+          <!-- Rec Card 3 -->
+          <div class="rec-card">
+            <div class="rec-product-image"></div>
+            <div class="rec-product-name">Tomatoes</div>
+            <div class="rec-product-price">$2.49/lb</div>
+            <button class="pds-btn pds-btn--primary pds-btn--size-md add-to-cart-btn">
+              + Add to Cart
+            </button>
+          </div>
+
+          <!-- Rec Card 4 -->
+          <div class="rec-card">
+            <div class="rec-product-image"></div>
+            <div class="rec-product-name">Blueberries</div>
+            <div class="rec-product-price">$4.99 each</div>
+            <button class="pds-btn pds-btn--primary pds-btn--size-md add-to-cart-btn">
+              + Add to Cart
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
